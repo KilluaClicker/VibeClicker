@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: vibe-clicker
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: 22.20.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vibe-clicker-db
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+
+databases:
+  - name: vibe-clicker-db
+    plan: free
+    databaseName: vibe_clicker
+    user: vibe_clicker
+    region: frankfurt

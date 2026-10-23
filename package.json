@@ -1,0 +1,22 @@
+{
+  "name": "vibe-clicker-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vibe Clicker — monochrome browser clicker with accounts, upgrades and clans.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "express": "^5.3.0",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.11"
+  }
+}

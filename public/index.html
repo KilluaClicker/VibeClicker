@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#050505" />
+    <meta
+      name="description"
+      content="Vibe Clicker — монохромный кликер с бесконечными улучшениями, кланами и сохранением прогресса."
+    />
+    <title>Vibe Clicker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ffffff'/%3E%3Ctext x='32' y='45' font-family='Arial Black,Arial' font-size='38' font-weight='900' text-anchor='middle' fill='%23050505'%3EV%3C/text%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <div class="pageGlow" aria-hidden="true"></div>
+
+    <div id="app" class="app is-hidden">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brandMark">V</div>
+          <div class="brandText">
+            <strong>VIBE CLICKER</strong>
+            <span>CLICK TO IMPROVE</span>
+          </div>
+        </div>
+        <div class="topStats">
+          <div class="topStat">
+            <span>БАЛАНС</span>
+            <strong id="topBalance">0</strong>
+          </div>
+          <div class="topStat">
+            <span>ЗА КЛИК</span>
+            <strong id="topPerClick">1</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="shell">
+        <aside class="sidebar">
+          <nav class="nav" aria-label="Навигация">
+            <button type="button" class="navItem is-active" data-tab="play">
+              <span class="navIndex">01</span><span>Играть</span>
+            </button>
+            <button type="button" class="navItem" data-tab="shop">
+              <span class="navIndex">02</span><span>Магазин</span>
+            </button>
+            <button type="button" class="navItem" data-tab="clans">
+              <span class="navIndex">03</span><span>Кланы</span>
+            </button>
+            <button type="button" class="navItem" data-tab="create">
+              <span class="navIndex">04</span><span>Создать клан</span>
+            </button>
+          </nav>
+
+          <div class="sideBlock sideProgress">
+            <span class="eyebrow">ПРОГРЕСС</span>
+            <strong class="sideValue"><span id="sideLevels">0</span> <em>УР.</em></strong>
+            <div class="bar"><i id="sideBar"></i></div>
+            <span class="sideHint" id="sideTarget">ЦЕЛЬ: +1</span>
+          </div>
+
+          <div class="sideBlock sideClan">
+            <span class="eyebrow">КЛАН</span>
+            <div class="sideClanRow">
+              <span class="tagChip" id="sideClanTag">—</span>
+              <strong id="sideClanName">НЕТ</strong>
+            </div>
+            <span class="sideHint" id="sideClanBonus">+2% за участника</span>
+          </div>
+
+          <div class="profile">
+            <div class="avatar" id="avatarLetter">V</div>
+            <div class="profileMeta">
+              <strong id="profileName">PLAYER</strong>
+              <span id="profileClan">БЕЗ КЛАНА</span>
+            </div>
+            <button type="button" class="iconBtn" id="logoutBtn" title="Выйти" aria-label="Выйти">
+              ↗
+            </button>
+          </div>
+        </aside>
+
+        <section class="stage">
+          <div class="pane is-active" id="pane-play">
+            <div class="paneHead">
+              <div>
+                <span class="kicker">ПРОФИЛЬ // LIVE</span>
+                <h1>ИГРАТЬ</h1>
+                <p>КЛИКАЙ. КОПИ. УЛУЧШАЙСЯ.</p>
+              </div>
+              <div class="headMeta"><i class="liveDot"></i>СЕССИЯ АКТИВНА</div>
+            </div>
+
+            <div class="playGrid">
+              <section class="arena" id="arena">
+                <div class="arenaGrid" aria-hidden="true"></div>
+
+                <div class="arenaTop">
+                  <div class="balanceBlock">
+                    <span class="eyebrow">ТВОЙ БАЛАНС</span>
+                    <div class="balanceLine">
+                      <strong id="balance">0</strong>
+                      <span class="coin">V</span>
+                      <span class="coinLabel">МОНЕТ</span>
+                    </div>
+                  </div>
+                  <div class="arenaPills">
+                    <div class="pill">
+                      <span>ЗА ОДИН КЛИК</span>
+                      <strong id="perClick">+1</strong>
+                    </div>
+                    <div class="pill">
+                      <span>СЕРИЯ</span>
+                      <strong id="series">0</strong>
+                      <div class="miniBar"><i id="seriesBar"></i></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="coreStage" id="coreStage">
+                  <div class="ring ringA" aria-hidden="true"></div>
+                  <div class="ring ringB" aria-hidden="true"></div>
+                  <div class="ring ringC" aria-hidden="true"></div>
+                  <div class="ticks" id="ticks" aria-hidden="true"></div>
+                  <div class="orbit orbitA" aria-hidden="true"><i></i><i></i><i></i></div>
+                  <div class="orbit orbitB" aria-hidden="true"><i></i><i></i></div>
+                  <div class="coreGlow" aria-hidden="true"></div>
+                  <button type="button" class="core" id="core" aria-label="Сделать клик">
+                    <span class="coreInner">
+                      <span class="coreBrand">VIBE&nbsp;&nbsp;CORE</span>
+                      <span class="coreV">V</span>
+                      <span class="coreWord">К&nbsp;Л&nbsp;И&nbsp;К</span>
+                      <span class="coreCode">01</span>
+                    </span>
+                  </button>
+                  <div class="clickHint" id="clickHint">НАЖМИ НА ЯДРО</div>
+                </div>
+
+                <div class="arenaBottom">
+                  <button type="button" class="quickShop" id="quickShop">В МАГАЗИН <span>→</span></button>
+                  <span class="sessionCode">СЕССИЯ // LIVE</span>
+                </div>
+              </section>
+
+              <div class="rail">
+                <section class="card nextCard">
+                  <div class="cardHead">
+                    <span class="eyebrow">СЛЕДУЮЩЕЕ УЛУЧШЕНИЕ</span>
+                    <span class="mono" id="nextIndex">01 / 18</span>
+                  </div>
+                  <strong class="nextAmount" id="nextAmount">+1</strong>
+                  <span class="nextSub">К КЛИКУ</span>
+                  <div class="divider"></div>
+                  <div class="nextPriceRow">
+                    <span class="eyebrow">ЦЕНА</span>
+                    <div class="price"><span class="coin">V</span><strong id="nextCost">20</strong></div>
+                  </div>
+                  <div class="bar"><i id="nextBar"></i></div>
+                  <button type="button" class="primaryBtn" id="nextBuy">КУПИТЬ</button>
+                </section>
+
+                <section class="card statsCard">
+                  <div class="cardHead"><span class="eyebrow">СТАТИСТИКА</span></div>
+                  <div class="divider"></div>
+                  <div class="statRow"><span>ВСЕГО КЛИКОВ</span><strong id="statClicks">0</strong></div>
+                  <div class="statRow"><span>УЛУЧШЕНИЙ</span><strong id="statLevels">0 УР.</strong></div>
+                  <div class="statRow"><span>БОНУС КЛАНА</span><strong id="statBonus">—</strong></div>
+                </section>
+
+                <button type="button" class="card clanCard" id="playClanCard">
+                  <div class="cardHead">
+                    <span class="eyebrow">ТВОЙ КЛАН</span>
+                    <span class="tagChip" id="playClanTag"></span>
+                  </div>
+                  <strong class="clanCardName" id="playClanName">БЕЗ КЛАНА</strong>
+                  <span class="sideHint" id="playClanBonus">+2% за каждого участника</span>
+                  <span class="linkText" id="playClanAction">ВСТУПИТЬ →</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="pane" id="pane-shop">
+            <div class="paneHead shopHead">
+              <div>
+                <span class="kicker">18 УРОВНЕЙ // БЕЗ ЛИМИТА</span>
+                <h1>МАГАЗИН</h1>
+                <p>ПОКУПАЙ ПОВТОРНО — БОНУС СУММИРУЕТСЯ</p>
+              </div>
+              <div class="shopProgress">
+                <span id="shopProgress">КУПЛЕНО 0 УРОВНЕЙ</span>
+                <div class="bar"><i id="shopBar"></i></div>
+              </div>
+            </div>
+            <div class="shopScroll" id="shopScroll">
+              <div class="shopGrid" id="shopGrid"></div>
+            </div>
+            <div class="shopFooter">ПРОКРУТИ ВНИЗ • 18 УЛУЧШЕНИЙ • ЦЕНЫ НЕ РАСТУТ</div>
+          </div>
+
+          <div class="pane" id="pane-clans">
+            <div class="paneHead">
+              <div>
+                <span class="kicker">ОБЩИЙ РЕЙТИНГ // 20 МЕСТ</span>
+                <h1>КЛАНЫ</h1>
+                <p>+2% К КЛИКУ ЗА КАЖДОГО УЧАСТНИКА</p>
+              </div>
+              <button type="button" class="ghostBtn" id="refreshClans">ОБНОВИТЬ</button>
+            </div>
+            <div class="clanLayout">
+              <section class="card clanListCard">
+                <div class="cardHead">
+                  <div class="stack">
+                    <span class="eyebrow">ТОП КЛАНОВ</span>
+                    <span class="sub" id="clanCount">0 КЛАНОВ // ОБЩИЙ РЕЙТИНГ</span>
+                  </div>
+                </div>
+                <div class="divider"></div>
+                <div class="clanList" id="clanList"></div>
+                <div class="emptyState" id="clanEmpty" hidden>
+                  КЛАНОВ ПОКА НЕТ<br /><span>СТАНЬ ПЕРВЫМ</span>
+                </div>
+              </section>
+              <section class="card myClanCard" id="myClanCard"></section>
+            </div>
+          </div>
+
+          <div class="pane" id="pane-create">
+            <div class="paneHead">
+              <div>
+                <span class="kicker">НОВЫЙ КЛАН // 25 000 МОНЕТ</span>
+                <h1>СОЗДАТЬ КЛАН</h1>
+                <p>СОБЕРИ КОМАНДУ И КАЧАЙ БОНУС</p>
+              </div>
+            </div>
+            <div class="createLayout">
+              <section class="card formCard">
+                <label class="fieldLabel" for="clanName">01 // НАЗВАНИЕ КЛАНА</label>
+                <input
+                  id="clanName"
+                  class="textInput"
+                  maxlength="20"
+                  placeholder="Например: НОЧНЫЕ ВОЛКИ"
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+                <span class="fieldHint">3–20 СИМВОЛОВ • ПРОХОДИТ МОДЕРАЦИЮ</span>
+
+                <label class="fieldLabel" for="clanTag">02 // ТЕГ КЛАНА</label>
+                <div class="tagRow">
+                  <input
+                    id="clanTag"
+                    class="textInput tagInput"
+                    maxlength="4"
+                    placeholder="NV"
+                    autocomplete="off"
+                    spellcheck="false"
+                  />
+                  <p>Тег виден рядом<br />с ником каждого участника</p>
+                </div>
+                <span class="fieldHint">2–4 СИМВОЛА • ТОЛЬКО A–Z И 0–9</span>
+
+                <div class="divider"></div>
+                <span class="eyebrow">ПРЕДПРОСМОТР</span>
+                <div class="previewCard">
+                  <span class="previewTag" id="previewTag">??</span>
+                  <div class="previewMeta">
+                    <strong id="previewName">НАЗВАНИЕ КЛАНА</strong>
+                    <span>ТВОЙ БУДУЩИЙ КЛАН • +2% ЗА УЧАСТНИКА</span>
+                  </div>
+                </div>
+
+                <div class="createBottom">
+                  <div class="createPrice">
+                    <span class="eyebrow">СТОИМОСТЬ</span>
+                    <div class="price"><span class="coin">V</span><strong id="createCost">25 000</strong></div>
+                    <span class="fieldHint" id="createBalance">У ТЕБЯ: 0</span>
+                  </div>
+                  <button type="button" class="primaryBtn" id="createClanBtn">СОЗДАТЬ КЛАН</button>
+                </div>
+                <span class="formNote" id="createBlocked"></span>
+              </section>
+
+              <aside class="card infoCard">
+                <span class="eyebrow">ЧТО ДАЁТ КЛАН</span>
+                <strong class="infoBig">+2%</strong>
+                <span class="infoSub">К КЛИКУ ЗА КАЖДОГО УЧАСТНИКА</span>
+                <div class="divider"></div>
+                <div class="infoRow"><span>УЧАСТНИКОВ</span><strong>20</strong></div>
+                <div class="infoRow"><span>МАКС. БОНУС</span><strong>+40%</strong></div>
+                <div class="infoRow"><span>СТОИМОСТЬ</span><strong>25 000</strong></div>
+                <div class="bonusExample">
+                  <span>ПОЛНЫЙ КЛАН // 20 УЧАСТНИКОВ</span>
+                  <strong>+40% К КАЖДОМУ КЛИКУ</strong>
+                </div>
+                <ul class="featureList">
+                  <li>Общий рейтинг клана</li>
+                  <li>Тег рядом с ником</li>
+                  <li>Бонус растёт с составом</li>
+                  <li>Участники видят друг друга</li>
+                </ul>
+                <span class="infoFootnote">Название и тег проходят модерацию. Будь вежлив.</span>
+              </aside>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>VIBE CLICKER // MONOCHROME EDITION</span>
+        <span>СЕРВЕР АВТОРИТЕТЕН • ПРОГРЕСС СОХРАНЯЕТСЯ</span>
+      </footer>
+    </div>
+
+    <div class="authOverlay" id="authOverlay" hidden>
+      <div class="authBackdrop" aria-hidden="true"></div>
+      <div class="authPanel">
+        <div class="authBrand">
+          <div class="brandMark brandMarkBig">V</div>
+          <span class="kicker">MONOCHROME CLICKER // 2026</span>
+          <h2>VIBE<br />CLICKER</h2>
+          <p>Кликай. Копи. Улучшайся. Прогресс хранится в PostgreSQL и не пропадает после закрытия вкладки.</p>
+          <ul class="authFeatures">
+            <li><span>01</span> 18 уровней улучшений без лимита</li>
+            <li><span>02</span> Кланы и общий рейтинг</li>
+            <li><span>03</span> Сохранение на сервере</li>
+          </ul>
+        </div>
+        <div class="authBox">
+          <div class="authTabs" role="tablist">
+            <button type="button" class="is-active" data-auth="login" role="tab">ВХОД</button>
+            <button type="button" data-auth="register" role="tab">РЕГИСТРАЦИЯ</button>
+          </div>
+          <form id="authForm" novalidate>
+            <label class="authField">
+              <span>НИК</span>
+              <input
+                id="authUsername"
+                class="textInput"
+                maxlength="16"
+                placeholder="например: vibe_master"
+                autocomplete="username"
+                spellcheck="false"
+              />
+            </label>
+            <label class="authField">
+              <span>ПАРОЛЬ</span>
+              <input
+                id="authPassword"
+                class="textInput"
+                type="password"
+                maxlength="72"
+                placeholder="минимум 6 символов"
+                autocomplete="current-password"
+              />
+            </label>
+            <button type="submit" class="primaryBtn authSubmit" id="authSubmit">ВОЙТИ</button>
+            <p class="authError" id="authError" role="alert"></p>
+          </form>
+          <p class="authNote">3–16 символов в нике • A–Z, 0–9 и _<br />Пароль от 6 символов</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="loadingOverlay" id="loadingOverlay">
+      <div class="loadingCard">
+        <div class="loadingLogo">V</div>
+        <strong>VIBE CLICKER</strong>
+        <span>C L I C K &nbsp; T O &nbsp; I M P R O V E</span>
+        <div class="loadingBar"><i></i></div>
+        <em>ЗАГРУЗКА ПРОФИЛЯ</em>
+      </div>
+    </div>
+
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
